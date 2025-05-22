@@ -1,46 +1,24 @@
 package com.prosilion.superconductor.util;
 
-import lombok.Getter;
-import nostr.api.NIP01;
-import nostr.api.NIP99;
-import nostr.event.BaseTag;
-import nostr.event.entities.ClassifiedListing;
-import nostr.event.impl.ClassifiedListingEvent;
-import nostr.event.impl.GenericEvent;
-import nostr.event.impl.TextNoteEvent;
-import nostr.event.tag.*;
-import nostr.id.Identity;
-import org.apache.commons.lang3.RandomStringUtils;
-
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+import lombok.Getter;
+import nostr.event.entities.ClassifiedListing;
+import nostr.event.impl.GenericEvent;
+import nostr.event.tag.EventTag;
+import nostr.event.tag.GeohashTag;
+import nostr.event.tag.HashtagTag;
+import nostr.event.tag.PriceTag;
+import nostr.event.tag.PubKeyTag;
+import nostr.event.tag.SubjectTag;
+import nostr.id.Identity;
+import org.apache.commons.lang3.RandomStringUtils;
 
 public class Factory {
 
   public static Identity createNewIdentity() {
     return Identity.generateRandomIdentity();
-  }
-
-  public static <T extends GenericEvent> T createTextNoteEvent(Identity identity, List<BaseTag> tags, String content) {
-    NIP01 nip01 = new NIP01(identity);
-    GenericEvent textNoteEvent = nip01.createTextNoteEvent(tags, content).getEvent();
-//    NIP01<NIP01Event> nip01_1 = new NIP01<>(identity);
-//    EventNostr sign = nip01_1.createTextNoteEvent(tags, content).sign();
-//    return sign;
-    return (T) GenericEvent.convert(textNoteEvent, TextNoteEvent.class);
-  }
-
-  public static <T extends GenericEvent> T createClassifiedListingEvent(
-      Identity identity,
-      List<BaseTag> tags,
-      String content,
-      ClassifiedListing cl) {
-
-    NIP99 nip99 = new NIP99(identity);
-    GenericEvent genericEvent = nip99.createClassifiedListingEvent(tags, content, cl).getEvent();
-    return (T) GenericEvent.convert(genericEvent, ClassifiedListingEvent.class);
   }
 
   public static GenericEvent createGenericEvent() {

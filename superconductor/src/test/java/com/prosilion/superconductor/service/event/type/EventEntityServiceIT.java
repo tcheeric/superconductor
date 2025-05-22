@@ -1,11 +1,18 @@
 package com.prosilion.superconductor.service.event.type;
 
 import com.prosilion.superconductor.util.Factory;
+import nostr.api.NIP01;
 import nostr.base.Kind;
 import nostr.base.PublicKey;
 import nostr.event.BaseTag;
 import nostr.event.impl.GenericEvent;
-import nostr.event.tag.*;
+import nostr.event.impl.TextNoteEvent;
+import nostr.event.tag.EventTag;
+import nostr.event.tag.GeohashTag;
+import nostr.event.tag.HashtagTag;
+import nostr.event.tag.PriceTag;
+import nostr.event.tag.PubKeyTag;
+import nostr.event.tag.SubjectTag;
 import nostr.id.Identity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +42,8 @@ class EventEntityServiceIT {
   @Autowired
   EventEntityService<GenericEvent> eventEntityService;
 
-  private static GenericEvent textNoteEvent;
-
+  TextNoteEvent textNoteEvent;
+  
   public EventEntityServiceIT() {
     List<BaseTag> tags = new ArrayList<>();
     tags.add(E_TAG);
@@ -46,8 +53,8 @@ class EventEntityServiceIT {
     tags.add(T_TAG);
     tags.add(PRICE_TAG);
 
-    textNoteEvent = Factory.createTextNoteEvent(IDENTITY, tags, CONTENT);
-    IDENTITY.sign(textNoteEvent);
+    textNoteEvent = (TextNoteEvent) new NIP01(IDENTITY).createTextNoteEvent(tags, CONTENT).sign().getEvent();
+    
     System.out.println("textNoteEvent getPubKey().toString(): " + textNoteEvent.getPubKey().toString());
     System.out.println("textNoteEvent getPubKey().toHexString(): " + textNoteEvent.getPubKey().toHexString());
     System.out.println("textNoteEvent getPubKey().toBech32String(): " + textNoteEvent.getPubKey().toBech32String());
